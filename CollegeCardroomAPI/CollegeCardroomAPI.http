@@ -1,0 +1,6 @@
+@CollegeCardroomAPI_HostAddress = http://localhost:5177
+
+GET {{CollegeCardroomAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
