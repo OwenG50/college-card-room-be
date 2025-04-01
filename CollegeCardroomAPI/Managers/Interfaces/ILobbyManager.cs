@@ -7,5 +7,6 @@ namespace CollegeCardroomAPI.Managers.Interfaces
         Lobby CreateLobby();
         Lobby GetLobby(int lobbyId);
         void AddUserToLobby(int lobbyId, User user);
+        List<Lobby> GetAllLobbies();
     }
 }

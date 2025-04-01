@@ -39,5 +39,12 @@ namespace CollegeCardroomAPI.Controllers
             }
             return Ok(lobby);
         }
+
+        [HttpGet]
+        public ActionResult<List<Lobby>> GetAllLobbies()
+        {
+            var lobbies = lobbyManager.GetAllLobbies();
+            return Ok(lobbies);
+        }
     }
 }

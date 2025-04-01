@@ -27,5 +27,10 @@ namespace CollegeCardroomAPI.Managers
         {
             lobbyRepository.AddUserToLobby(lobbyId, user);
         }
+
+        public List<Lobby> GetAllLobbies()
+        {
+            return lobbyRepository.GetAllLobbies();
+        }
     }
 }

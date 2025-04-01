@@ -23,6 +23,14 @@ namespace CollegeCardroomAPI.Controllers
             return Ok(users);
         }
 
+        [HttpGet]
+        [Route("{userId}")]
+        public ActionResult<User> GetUser(int userId)
+        {
+            var user = userManager.GetUser(userId);
+            return Ok(user);
+        }
+
         [HttpPost]
         public IActionResult AddUser([FromBody] User user)
         {

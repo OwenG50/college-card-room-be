@@ -15,12 +15,17 @@ namespace CollegeCardroomAPI.Repositories
         {
             filePath = Path.Combine(environment.ContentRootPath, "Data", "Users.json");
             var jsonData = File.ReadAllText(filePath);
-            users = JsonConvert.DeserializeObject<List<User>>(jsonData);
+            users = JsonConvert.DeserializeObject<List<User>>(jsonData) ?? new List<User>();
         }
 
         public List<User> GetAllUsers()
         {
             return users;
+        }
+
+        public User GetUser(int userId)
+        {
+            return users.FirstOrDefault(u => u.UserId == userId);
         }
 
         public void AddUser(User user)

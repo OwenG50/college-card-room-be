@@ -18,6 +18,11 @@ namespace CollegeCardroomAPI.Managers
             return userRepository.GetAllUsers();
         }
 
+        public User GetUser(int userId)
+        {
+            return userRepository.GetUser(userId);
+        }
+
         public void AddUser(User user)
         {
             userRepository.AddUser(user);

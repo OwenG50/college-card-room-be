@@ -8,5 +8,6 @@ namespace CollegeCardroomAPI.Managers.Interfaces
         List<User> GetAllUsers();
         void AddUser(User user);
         void RemoveUser(int userId);
+        User GetUser(int userId);
     }
 }
