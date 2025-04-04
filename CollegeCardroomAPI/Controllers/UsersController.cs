@@ -7,19 +7,19 @@ namespace CollegeCardroomAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
-        private readonly IUserManager userManager;
+        private readonly IUsersManager usersManager;
 
-        public UserController(IUserManager userManager)
+        public UsersController(IUsersManager usersManager)
         {
-            this.userManager = userManager;
+            this.usersManager = usersManager;
         }
 
         [HttpGet]
         public ActionResult<List<User>> GetUsers()
         {
-            var users = userManager.GetAllUsers();
+            var users = usersManager.GetAllUsers();
             return Ok(users);
         }
 
@@ -27,21 +27,28 @@ namespace CollegeCardroomAPI.Controllers
         [Route("{userId}")]
         public ActionResult<User> GetUser(int userId)
         {
-            var user = userManager.GetUser(userId);
+            var user = usersManager.GetUser(userId);
             return Ok(user);
         }
 
         [HttpPost]
         public IActionResult AddUser([FromBody] User user)
         {
-            userManager.AddUser(user);
+            usersManager.AddUser(user);
             return Ok();
         }
 
         [HttpDelete("{userId}")]
         public IActionResult RemoveUser(int userId)
         {
-            userManager.RemoveUser(userId);
+            usersManager.RemoveUser(userId);
+            return Ok();
+        }
+
+        [HttpPut]
+        public IActionResult UpdateUser([FromBody] User user)
+        {
+            usersManager.UpdateUser(user);
             return Ok();
         }
     }

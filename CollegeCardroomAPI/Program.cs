@@ -9,10 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<IHelloRepository, HelloRepository>();
 builder.Services.AddScoped<IHelloManager, HelloManager>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserManager, UserManager>();
-builder.Services.AddScoped<ILobbyRepository, LobbyRepository>();
-builder.Services.AddScoped<ILobbyManager, LobbyManager>();
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<IUsersManager, UsersManager>();
+builder.Services.AddScoped<ILobbiesRepository, LobbiesRepository>();
+builder.Services.AddScoped<ILobbiesManager, LobbiesManager>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

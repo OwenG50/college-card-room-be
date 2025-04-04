@@ -1,14 +1,15 @@
 ﻿using CollegeCardroomAPI.Managers.Interfaces;
 using CollegeCardroomAPI.Models;
+using CollegeCardroomAPI.Repositories;
 using CollegeCardroomAPI.Repositories.Interfaces;
 
 namespace CollegeCardroomAPI.Managers
 {
-    public class UserManager : IUserManager
+    public class UsersManager : IUsersManager
     {
-        private readonly IUserRepository userRepository;
+        private readonly IUsersRepository userRepository;
 
-        public UserManager(IUserRepository userRepository)
+        public UsersManager(IUsersRepository userRepository)
         {
             this.userRepository = userRepository;
         }
@@ -31,6 +32,12 @@ namespace CollegeCardroomAPI.Managers
         public void RemoveUser(int userId)
         {
             userRepository.RemoveUser(userId);
+        }
+
+        public User UpdateUser(User user)
+        {
+            userRepository.UpdateUser(user);
+            return user;
         }
     }
 }

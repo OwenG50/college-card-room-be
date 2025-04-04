@@ -6,13 +6,13 @@ using System.Linq;
 
 namespace CollegeCardroomAPI.Repositories
 {
-    public class LobbyRepository : ILobbyRepository
+    public class LobbiesRepository : ILobbiesRepository
     {
         private readonly List<Lobby> lobbies;
         private readonly string filePath;
         private static int nextLobbyId = 1;
 
-        public LobbyRepository(IHostEnvironment environment)
+        public LobbiesRepository(IHostEnvironment environment)
         {
             filePath = Path.Combine(environment.ContentRootPath, "Data", "Lobbies.json");
             if (File.Exists(filePath))
@@ -61,10 +61,42 @@ namespace CollegeCardroomAPI.Repositories
             return lobbies;
         }
 
+        public void DeleteLobby(int lobbyId)
+        {
+            var lobby = GetLobby(lobbyId);
+            if (lobby != null)
+            {
+                lobbies.Remove(lobby);
+                SaveChanges();
+            }
+        }
+        
+        public void DeleteAllLobbies()
+        {
+            lobbies.Clear();
+            SaveChanges();
+        }
+
+        public void RemoveUserFromLobby(int lobbyId, int userId)
+        {
+            var lobby = GetLobby(lobbyId);
+            if (lobby != null)
+            {
+                var user = lobby.Users.FirstOrDefault(u => u.UserId == userId);
+                if (user != null)
+                {
+                    lobby.Users.Remove(user);
+                    SaveChanges();
+                }
+            }
+        }
+
         private void SaveChanges()
         {
             var jsonData = JsonConvert.SerializeObject(lobbies, Formatting.Indented);
             File.WriteAllText(filePath, jsonData);
         }
+
+
     }
 }

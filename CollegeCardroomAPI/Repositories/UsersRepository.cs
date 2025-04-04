@@ -6,12 +6,12 @@ using System;
 
 namespace CollegeCardroomAPI.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UsersRepository : IUsersRepository
     {
         private readonly List<User> users;
         private readonly string filePath;
 
-        public UserRepository(IHostEnvironment environment)
+        public UsersRepository(IHostEnvironment environment)
         {
             filePath = Path.Combine(environment.ContentRootPath, "Data", "Users.json");
             var jsonData = File.ReadAllText(filePath);
@@ -40,6 +40,18 @@ namespace CollegeCardroomAPI.Repositories
             if (user != null)
             {
                 users.Remove(user);
+                SaveChanges();
+            }
+        }
+
+        public void UpdateUser(User user)
+        {
+            var existingUser = users.FirstOrDefault(u => u.UserId == user.UserId);
+            if (existingUser != null)
+            {
+                existingUser.UserName = user.UserName;
+                existingUser.FirstName = user.FirstName;
+                existingUser.LastName = user.LastName;
                 SaveChanges();
             }
         }
