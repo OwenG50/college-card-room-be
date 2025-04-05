@@ -37,6 +37,10 @@ namespace CollegeCardroomAPI.Controllers
                 await pokerRoomHubContext.Clients.Client(user.ConnectionId).SendAsync("ReceiveMessage", "Welcome to the room!");
             }
 
+            await pokerRoomHubContext.Clients.Group(lobbyId.ToString()).SendAsync("GameStarted", lobbyId);
+
+            // Add logic for handling start logic here. Call a method from Game logic.
+
             return Ok();
         }
 
@@ -89,9 +93,10 @@ namespace CollegeCardroomAPI.Controllers
         }
 
         [HttpDelete("{lobbyId}")]
-        public IActionResult DeleteLobby(int lobbyId)
+        public async Task<IActionResult> DeleteLobby(int lobbyId)
         {
             lobbiesManager.DeleteLobby(lobbyId);
+            await pokerRoomHubContext.Clients.All.SendAsync("LobbyDeleted", lobbyId);
             return Ok();
         }
 
