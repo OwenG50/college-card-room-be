@@ -1,6 +1,8 @@
-﻿using CollegeCardroomAPI.Managers.Interfaces;
+﻿using CollegeCardroomAPI.Hubs;
+using CollegeCardroomAPI.Managers.Interfaces;
 using CollegeCardroomAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CollegeCardroomAPI.Controllers
 {
@@ -9,23 +11,55 @@ namespace CollegeCardroomAPI.Controllers
     public class LobbiesController : ControllerBase
     {
         private readonly ILobbiesManager lobbiesManager;
+        private readonly IHubContext<PokerRoomHub> pokerRoomHubContext;
 
-        public LobbiesController(ILobbiesManager lobbiesManager)
+        public LobbiesController(ILobbiesManager lobbiesManager, IHubContext<PokerRoomHub> pokerRoomHubContext)
         {
             this.lobbiesManager = lobbiesManager;
+            this.pokerRoomHubContext = pokerRoomHubContext;
+
+        }
+
+        [HttpPost("{lobbyId}/start")]
+        public async Task<IActionResult> StartGame(int lobbyId)
+        {
+            var lobby = lobbiesManager.GetLobby(lobbyId);
+            if (lobby == null)
+            {
+                return NotFound();
+            }
+
+            lobbiesManager.SetLobbyStarted(lobbyId);
+
+            foreach (var user in lobby.Users)
+            {
+                await pokerRoomHubContext.Groups.AddToGroupAsync(user.ConnectionId, lobbyId.ToString());
+                await pokerRoomHubContext.Clients.Client(user.ConnectionId).SendAsync("ReceiveMessage", "Welcome to the room!");
+            }
+
+            return Ok();
         }
 
         [HttpPost("create")]
-        public ActionResult<Lobby> CreateLobby()
+        public async Task <ActionResult<Lobby>> CreateLobby()
         {
             var lobby = lobbiesManager.CreateLobby();
+            await pokerRoomHubContext.Clients.All.SendAsync("LobbyCreated", lobby);
             return Ok(lobby);
         }
 
         [HttpPost("{lobbyId}/join")]
-        public IActionResult JoinLobby(int lobbyId, [FromBody] User user)
+        public async Task<IActionResult> JoinLobby(int lobbyId, [FromBody] User user)
         {
             lobbiesManager.AddUserToLobby(lobbyId, user);
+
+            var lobby = lobbiesManager.GetLobby(lobbyId);
+            if (lobby != null)
+            {
+                await pokerRoomHubContext.Groups.AddToGroupAsync(user.ConnectionId, lobbyId.ToString());
+                await pokerRoomHubContext.Clients.All.SendAsync("LobbyUpdated", lobby);
+            }
+
             return Ok();
         }
 

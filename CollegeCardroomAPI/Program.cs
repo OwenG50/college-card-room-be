@@ -2,11 +2,13 @@ using CollegeCardroomAPI.Managers;
 using CollegeCardroomAPI.Repositories;
 using CollegeCardroomAPI.Repositories.Interfaces;
 using CollegeCardroomAPI.Managers.Interfaces;
+using CollegeCardroomAPI.Hubs;
 
+string clientUrl = "http://localhost:3000";
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 builder.Services.AddScoped<IHelloRepository, HelloRepository>();
 builder.Services.AddScoped<IHelloManager, HelloManager>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
@@ -19,15 +21,16 @@ builder.Services.AddScoped<ILobbiesManager, LobbiesManager>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Optional CORS policy, if calling from React
+// Configure CORS policy
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: "AllowAll",
+    options.AddPolicy(name: "AllowSpecificOrigins",
         policy =>
         {
-            policy.AllowAnyOrigin()
+            policy.WithOrigins(clientUrl)
                   .AllowAnyHeader()
-                  .AllowAnyMethod();
+                  .AllowAnyMethod()
+                  .AllowCredentials();
         });
 });
 
@@ -40,8 +43,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowAll");
+app.UseCors("AllowSpecificOrigins");
 //app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<PokerRoomHub>("/hubs/pokerRoom");
 app.Run();

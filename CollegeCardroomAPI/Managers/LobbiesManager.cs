@@ -52,5 +52,10 @@ namespace CollegeCardroomAPI.Managers
                 lobbiesRepository.DeleteLobby(lobbyId);
             }
         }
+
+        public void SetLobbyStarted(int lobbyId)
+        {
+            lobbiesRepository.SetLobbyStarted(lobbyId);
+        }
     }
 }

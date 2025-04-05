@@ -91,6 +91,16 @@ namespace CollegeCardroomAPI.Repositories
             }
         }
 
+        public void SetLobbyStarted(int lobbyId)
+        {
+            var lobby = GetLobby(lobbyId);
+            if (lobby != null)
+            {
+                lobby.isStarted = true;
+                SaveChanges();
+            }
+        }
+
         private void SaveChanges()
         {
             var jsonData = JsonConvert.SerializeObject(lobbies, Formatting.Indented);

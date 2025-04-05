@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "LobbyId": 2,
+    "Users": [
+      {
+        "UserId": 1,
+        "UserName": "user1",
+        "FirstName": "John",
+        "LastName": "Doe",
+        "ConnectionId": "FDwR9zReNgWBriUzN5_UpA"
+      },
+      {
+        "UserId": 7,
+        "UserName": "user7",
+        "FirstName": "Matthew",
+        "LastName": "Moore",
+        "ConnectionId": "8qfip_WBihlkNrxh5wiBPw"
+      }
+    ],
+    "isStarted": true
+  }
+]

@@ -6,7 +6,7 @@
         public required string UserName { get; set; }
         public int ChipCount { get; set; }
         public int SeatNumber { get; set; }
-        public List<string> CurrentHand { get; set; } = new List<string>();
+        public List<Card> CurrentHand { get; set; } = new List<Card>();
         public bool IsFolded { get; set; }
         public bool IsBigBlind { get; set; }
         public bool IsSmallBlind { get; set; }
