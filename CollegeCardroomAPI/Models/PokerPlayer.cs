@@ -11,5 +11,6 @@
         public bool IsBigBlind { get; set; }
         public bool IsSmallBlind { get; set; }
         public List<string> Actions { get; set; } = new List<string> { "bet", "call", "fold", "raise", "check" };
+        public string ConnectionId { get; set; } = string.Empty;
     }
 }

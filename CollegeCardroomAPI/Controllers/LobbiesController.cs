@@ -30,6 +30,10 @@ namespace CollegeCardroomAPI.Controllers
             }
 
             lobbiesManager.SetLobbyStarted(lobbyId);
+            if (lobby.isStarted)
+            {
+                lobbiesManager.HandleLobbyStart(lobbyId);
+            }
 
             foreach (var user in lobby.Users)
             {

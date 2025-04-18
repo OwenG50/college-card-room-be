@@ -12,5 +12,6 @@ namespace CollegeCardroomAPI.Managers.Interfaces
         void DeleteLobby(int lobbyId);
         void DeleteAllLobbies();
         void SetLobbyStarted(int lobbyId);
+        void HandleLobbyStart(int lobbyId);
     }
 }

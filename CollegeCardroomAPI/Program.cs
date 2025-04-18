@@ -15,6 +15,8 @@ builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IUsersManager, UsersManager>();
 builder.Services.AddScoped<ILobbiesRepository, LobbiesRepository>();
 builder.Services.AddScoped<ILobbiesManager, LobbiesManager>();
+builder.Services.AddScoped<IPokerGamesRepository, PokerGamesRepository>();
+builder.Services.AddScoped<IPokerGamesManager, PokerGamesManager>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,5 +1,6 @@
 ﻿using CollegeCardroomAPI.Managers.Interfaces;
 using CollegeCardroomAPI.Models;
+using CollegeCardroomAPI.Repositories;
 using CollegeCardroomAPI.Repositories.Interfaces;
 
 namespace CollegeCardroomAPI.Managers
@@ -7,10 +8,16 @@ namespace CollegeCardroomAPI.Managers
     public class LobbiesManager : ILobbiesManager
     {
         private readonly ILobbiesRepository lobbiesRepository;
+        private readonly IPokerGamesRepository pokerGamesRepository;
+        private readonly IPokerGamesManager pokerGamesManager;
 
-        public LobbiesManager(ILobbiesRepository lobbiesRepository)
+        public LobbiesManager(ILobbiesRepository lobbiesRepository, IPokerGamesRepository pokerGamesRepository, IPokerGamesManager pokerGamesManager)
         {
             this.lobbiesRepository = lobbiesRepository;
+            this.pokerGamesRepository = pokerGamesRepository;
+
+            this.pokerGamesManager = pokerGamesManager;
+
         }
 
         public Lobby CreateLobby()
@@ -57,5 +64,30 @@ namespace CollegeCardroomAPI.Managers
         {
             lobbiesRepository.SetLobbyStarted(lobbyId);
         }
+
+        public void HandleLobbyStart(int lobbyId)
+        {
+            var lobby = GetLobby(lobbyId);
+            if (lobby == null || lobby.Users.Count == 0)
+            {
+                throw new InvalidOperationException("Lobby not found or no users in the lobby.");
+            }
+
+            var pokerPlayers = ConvertUsersToPokerPlayers(lobby.Users);
+            var pokerGame = pokerGamesManager.CreatePokerGame(lobbyId, pokerPlayers);
+
+            // Additional game start logic can be added here
+        }
+
+        private List<PokerPlayer> ConvertUsersToPokerPlayers(List<User> users)
+        {
+            return users.Select(user => new PokerPlayer
+            {
+                UserId = user.UserId,
+                UserName = user.UserName,
+                ConnectionId = user.ConnectionId
+            }).ToList();
+        }
+
     }
 }
