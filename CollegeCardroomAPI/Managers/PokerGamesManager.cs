@@ -31,9 +31,29 @@ namespace CollegeCardroomAPI.Managers
             return pokerGamesRepository.CreatePokerGame(pokerGame);
         }
 
+        public List<PokerGame> GetAllPokerGames()
+        {
+            return pokerGamesRepository.GetAllPokerGames();
+        }
+
         public PokerGame? GetPokerGame(Guid gameId)
         {
             return pokerGamesRepository.GetPokerGame(gameId);
+        }
+
+        public PokerGame? GetPokerGameByLobbyId(int lobbyId)
+        {
+            return pokerGamesRepository.GetPokerGameByLobbyId(lobbyId);
+        }
+
+        public void DeletePokerGame(Guid gameId)
+        { 
+            pokerGamesRepository.DeletePokerGame(gameId);
+        }
+
+        public void DeleteAllPokerGames()
+        { 
+            pokerGamesRepository.DeleteAllPokerGames();
         }
 
     }

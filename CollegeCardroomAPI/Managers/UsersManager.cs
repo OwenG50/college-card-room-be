@@ -1,6 +1,5 @@
 ﻿using CollegeCardroomAPI.Managers.Interfaces;
 using CollegeCardroomAPI.Models;
-using CollegeCardroomAPI.Repositories;
 using CollegeCardroomAPI.Repositories.Interfaces;
 
 namespace CollegeCardroomAPI.Managers

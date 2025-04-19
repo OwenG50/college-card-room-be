@@ -1,6 +1,5 @@
 ﻿using CollegeCardroomAPI.Managers.Interfaces;
 using CollegeCardroomAPI.Models;
-using CollegeCardroomAPI.Repositories;
 using CollegeCardroomAPI.Repositories.Interfaces;
 
 namespace CollegeCardroomAPI.Managers
@@ -8,13 +7,11 @@ namespace CollegeCardroomAPI.Managers
     public class LobbiesManager : ILobbiesManager
     {
         private readonly ILobbiesRepository lobbiesRepository;
-        private readonly IPokerGamesRepository pokerGamesRepository;
         private readonly IPokerGamesManager pokerGamesManager;
 
-        public LobbiesManager(ILobbiesRepository lobbiesRepository, IPokerGamesRepository pokerGamesRepository, IPokerGamesManager pokerGamesManager)
+        public LobbiesManager(ILobbiesRepository lobbiesRepository, IPokerGamesManager pokerGamesManager)
         {
             this.lobbiesRepository = lobbiesRepository;
-            this.pokerGamesRepository = pokerGamesRepository;
 
             this.pokerGamesManager = pokerGamesManager;
 
