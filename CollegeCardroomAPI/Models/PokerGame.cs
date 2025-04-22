@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DeckOfCardsLibrary;
 
 namespace CollegeCardroomAPI.Models
 {
@@ -10,7 +11,7 @@ namespace CollegeCardroomAPI.Models
         public PokerPlayer? BigBlind { get; set; }
         public PokerPlayer? SmallBlind { get; set; }
         public PokerPlayer? Dealer { get; set; }
-        public List<Card> Deck { get; set; } = new List<Card>();
+        public Deck Deck { get; set; } = Deck.get();
         public int BigBlindAmount { get; set; }
         public int SmallBlindAmount { get; set; }
         public int Pot { get; set; }

@@ -61,6 +61,29 @@ namespace CollegeCardroomAPI.Repositories
             SaveChanges();
         }
 
+        public void UpdatePokerGame(PokerGame updatedGame)
+        {
+            var existingGame = GetPokerGame(updatedGame.GameId);
+
+            if (existingGame == null)
+            {
+                throw new ArgumentException($"Poker game with ID {updatedGame.GameId} not found.");
+            }
+
+            // Update all properties that can change after starting the game
+            existingGame.Players = updatedGame.Players;
+            existingGame.BigBlind = updatedGame.BigBlind;
+            existingGame.SmallBlind = updatedGame.SmallBlind;
+            existingGame.Dealer = updatedGame.Dealer;
+            existingGame.Deck = updatedGame.Deck;
+            existingGame.BigBlindAmount = updatedGame.BigBlindAmount;
+            existingGame.SmallBlindAmount = updatedGame.SmallBlindAmount;
+            existingGame.Pot = updatedGame.Pot;
+            existingGame.IsGameStarted = updatedGame.IsGameStarted;
+
+            SaveChanges();
+        }
+
         private void SaveChanges()
         {
             var jsonData = JsonConvert.SerializeObject(pokerGames, Formatting.Indented);

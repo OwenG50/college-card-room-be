@@ -1,4 +1,6 @@
-﻿namespace CollegeCardroomAPI.Models
+﻿using DeckOfCardsLibrary;
+
+namespace CollegeCardroomAPI.Models
 {
     public class PokerPlayer
     {

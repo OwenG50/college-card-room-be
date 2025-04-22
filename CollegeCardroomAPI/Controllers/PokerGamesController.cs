@@ -68,5 +68,31 @@ namespace CollegeCardroomAPI.Controllers
             pokerGamesManager.DeleteAllPokerGames();
             return NoContent();
         }
+
+        [HttpPost("{gameId:guid}/settings")]
+        public IActionResult SetGameSettings(Guid gameId, [FromBody] GameSettingsRequest request)
+        {
+            try
+            {
+                pokerGamesManager.SetGameSettings(gameId, request.SmallBlindAmount, request.BigBlindAmount);
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
+
+    public class GameSettingsRequest
+    {
+        // To update more settings in the future, we can add more properties here and into the managers method paramaters
+        public int SmallBlindAmount { get; set; }
+        public int BigBlindAmount { get; set; }
+    }
+
 }

@@ -10,6 +10,7 @@ namespace CollegeCardroomAPI.Managers.Interfaces
         PokerGame? GetPokerGame(Guid gameId);
         void DeletePokerGame(Guid gameId);
         void DeleteAllPokerGames();
+        void SetGameSettings(Guid gameId, int smallBlindAmount, int bigBlindAmount);
 
     }
 }

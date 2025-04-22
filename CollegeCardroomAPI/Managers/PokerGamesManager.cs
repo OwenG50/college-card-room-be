@@ -1,12 +1,14 @@
 ﻿using CollegeCardroomAPI.Managers.Interfaces;
 using CollegeCardroomAPI.Models;
 using CollegeCardroomAPI.Repositories.Interfaces;
+using DeckOfCardsLibrary;
 
 namespace CollegeCardroomAPI.Managers
 {
     public class PokerGamesManager : IPokerGamesManager
     {
         private readonly IPokerGamesRepository pokerGamesRepository;
+        private string gameUrl = "http://localhost:3000/poker-games/"; // Consider moving this to a config file
 
         public PokerGamesManager(IPokerGamesRepository pokerGamesRepository)
         {
@@ -15,7 +17,6 @@ namespace CollegeCardroomAPI.Managers
 
         public PokerGame CreatePokerGame(int lobbyId, List<PokerPlayer> players)
         {
-            var url = "http://localhost:3000/poker-games/"; // Consider moving this to a config file
             var gameId = Guid.NewGuid();
 
             var pokerGame = new PokerGame
@@ -25,10 +26,39 @@ namespace CollegeCardroomAPI.Managers
                 Players = players,
                 IsGameStarted = false,
                 CreatedAt = DateTime.UtcNow,
-                GameUrl = url + gameId.ToString()
+                GameUrl = gameUrl + gameId.ToString(),
+                Deck = Deck.get(),
             };
 
             return pokerGamesRepository.CreatePokerGame(pokerGame);
+        }
+
+        public void SetGameSettings(Guid gameId, int smallBlindAmount, int bigBlindAmount)
+        {
+            var pokerGame = pokerGamesRepository.GetPokerGame(gameId);
+
+            if (pokerGame == null)
+            {
+                throw new ArgumentException("Poker game not found.");
+            }
+
+            pokerGame.SmallBlindAmount = smallBlindAmount;
+            pokerGame.BigBlindAmount = bigBlindAmount;
+
+            // Randomly select a dealer
+            if (pokerGame.Players.Count > 0)
+            {
+                var random = new Random();
+                var dealerIndex = random.Next(pokerGame.Players.Count);
+                pokerGame.Dealer = pokerGame.Players[dealerIndex];
+            }
+            else
+            {
+                throw new InvalidOperationException("No players available to select a dealer.");
+            }
+
+            // Save the updated game settings
+            pokerGamesRepository.UpdatePokerGame(pokerGame);
         }
 
         public List<PokerGame> GetAllPokerGames()

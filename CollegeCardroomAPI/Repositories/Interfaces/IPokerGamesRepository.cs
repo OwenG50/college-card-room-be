@@ -10,6 +10,7 @@ namespace CollegeCardroomAPI.Repositories.Interfaces
         PokerGame? GetPokerGameByLobbyId(int lobbyId);
         void DeletePokerGame(Guid gameId);
         void DeleteAllPokerGames();
+        void UpdatePokerGame(PokerGame updatedGame);
 
     }
 }
