@@ -1,7 +1,9 @@
-﻿using CollegeCardroomAPI.Managers.Interfaces;
+﻿using CollegeCardroomAPI.Hubs;
+using CollegeCardroomAPI.Managers.Interfaces;
 using CollegeCardroomAPI.Models;
 using CollegeCardroomAPI.Repositories.Interfaces;
 using DeckOfCardsLibrary;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CollegeCardroomAPI.Managers
 {
@@ -33,7 +35,7 @@ namespace CollegeCardroomAPI.Managers
             return pokerGamesRepository.CreatePokerGame(pokerGame);
         }
 
-        public void SetGameSettings(Guid gameId, int smallBlindAmount, int bigBlindAmount)
+        public void SetGameSettings(Guid gameId, int smallBlindAmount, int bigBlindAmount, IHubContext<PokerRoomHub> hubContext)
         {
             var pokerGame = pokerGamesRepository.GetPokerGame(gameId);
 
@@ -45,17 +47,10 @@ namespace CollegeCardroomAPI.Managers
             pokerGame.SmallBlindAmount = smallBlindAmount;
             pokerGame.BigBlindAmount = bigBlindAmount;
 
-            // Randomly select a dealer
-            if (pokerGame.Players.Count > 0)
-            {
-                var random = new Random();
-                var dealerIndex = random.Next(pokerGame.Players.Count);
-                pokerGame.Dealer = pokerGame.Players[dealerIndex];
-            }
-            else
-            {
-                throw new InvalidOperationException("No players available to select a dealer.");
-            }
+            // Broadcast update
+            hubContext.Clients.Group(pokerGame.GameId.ToString()).SendAsync("UpdateGameSettings", pokerGame);
+
+            // TODO add method to Randomly select a dealer
 
             // Save the updated game settings
             pokerGamesRepository.UpdatePokerGame(pokerGame);

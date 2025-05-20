@@ -12,7 +12,8 @@ namespace CollegeCardroomAPI.Models
         public bool IsFolded { get; set; }
         public bool IsBigBlind { get; set; }
         public bool IsSmallBlind { get; set; }
-        public List<string> Actions { get; set; } = new List<string> { "bet", "call", "fold", "raise", "check" };
+        public static IReadOnlyList<string> Actions { get; } = new List<string> { "bet", "call", "fold", "raise", "check" };
+        public int ActionAmount { get; set; }
         public string ConnectionId { get; set; } = string.Empty;
     }
 }

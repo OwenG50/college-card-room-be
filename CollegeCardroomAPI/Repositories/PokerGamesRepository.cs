@@ -70,8 +70,42 @@ namespace CollegeCardroomAPI.Repositories
                 throw new ArgumentException($"Poker game with ID {updatedGame.GameId} not found.");
             }
 
-            // Update all properties that can change after starting the game
-            existingGame.Players = updatedGame.Players;
+            // Update existing players
+            foreach (var updatedPlayer in updatedGame.Players)
+            {
+                var existingPlayer = existingGame.Players.FirstOrDefault(p => p.UserId == updatedPlayer.UserId);
+
+                if (existingPlayer != null)
+                {
+                    existingPlayer.ChipCount = updatedPlayer.ChipCount;
+                    existingPlayer.SeatNumber = updatedPlayer.SeatNumber;
+                    existingPlayer.CurrentHand = updatedPlayer.CurrentHand;
+                    existingPlayer.IsFolded = updatedPlayer.IsFolded;
+                    existingPlayer.IsBigBlind = updatedPlayer.IsBigBlind;
+                    existingPlayer.IsSmallBlind = updatedPlayer.IsSmallBlind;
+                    existingPlayer.ActionAmount = updatedPlayer.ActionAmount;
+                    existingPlayer.ConnectionId = updatedPlayer.ConnectionId;
+                }
+                else
+                {
+                    // Add new players if they don't already exist
+                    existingGame.Players.Add(new PokerPlayer
+                    {
+                        UserId = updatedPlayer.UserId,
+                        UserName = updatedPlayer.UserName,
+                        ChipCount = updatedPlayer.ChipCount,
+                        SeatNumber = updatedPlayer.SeatNumber,
+                        CurrentHand = updatedPlayer.CurrentHand,
+                        IsFolded = updatedPlayer.IsFolded,
+                        IsBigBlind = updatedPlayer.IsBigBlind,
+                        IsSmallBlind = updatedPlayer.IsSmallBlind,
+                        ActionAmount = updatedPlayer.ActionAmount,
+                        ConnectionId = updatedPlayer.ConnectionId
+                    });
+                }
+            }
+
+            // Update other game properties
             existingGame.BigBlind = updatedGame.BigBlind;
             existingGame.SmallBlind = updatedGame.SmallBlind;
             existingGame.Dealer = updatedGame.Dealer;

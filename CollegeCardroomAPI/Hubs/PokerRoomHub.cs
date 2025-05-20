@@ -43,5 +43,10 @@ namespace CollegeCardroomAPI.Hubs
             await Clients.All.SendAsync("GameStarted", lobbyId);
         }
 
+        public async Task BroadcastGameSettingsUpdated(int lobbyId)
+        {
+            await Clients.Group(lobbyId.ToString()).SendAsync("GameSettingsUpdated");
+        }
+
     }
 }

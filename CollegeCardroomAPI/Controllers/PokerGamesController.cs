@@ -1,6 +1,8 @@
-﻿using CollegeCardroomAPI.Managers.Interfaces;
+﻿using CollegeCardroomAPI.Hubs;
+using CollegeCardroomAPI.Managers.Interfaces;
 using CollegeCardroomAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CollegeCardroomAPI.Controllers
 {
@@ -9,10 +11,12 @@ namespace CollegeCardroomAPI.Controllers
     public class PokerGamesController : ControllerBase
     {
         private readonly IPokerGamesManager pokerGamesManager;
+        private readonly IHubContext<PokerRoomHub> pokerRoomHubContext;
 
-        public PokerGamesController(IPokerGamesManager pokerGamesManager)
+        public PokerGamesController(IPokerGamesManager pokerGamesManager, IHubContext<PokerRoomHub> pokerRoomHubContext)
         {
             this.pokerGamesManager = pokerGamesManager;
+            this.pokerRoomHubContext = pokerRoomHubContext;
         }
 
         [HttpGet]
@@ -74,7 +78,7 @@ namespace CollegeCardroomAPI.Controllers
         {
             try
             {
-                pokerGamesManager.SetGameSettings(gameId, request.SmallBlindAmount, request.BigBlindAmount);
+                pokerGamesManager.SetGameSettings(gameId, request.SmallBlindAmount, request.BigBlindAmount, pokerRoomHubContext);
                 return NoContent();
             }
             catch (ArgumentException ex)
