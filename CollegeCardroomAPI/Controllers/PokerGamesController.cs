@@ -90,6 +90,38 @@ namespace CollegeCardroomAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("{gameId:guid}/setInitialDealerAndBlinds")]
+        public IActionResult SetDealerAndBlinds(Guid gameId)
+        {
+            try
+            {
+                pokerGamesManager.SelectInitialDealerAndBlinds(gameId, pokerRoomHubContext);
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("{gameId:guid}/start")]
+        public IActionResult StartGame(Guid gameId)
+        {
+            try
+            {
+                pokerGamesManager.StartGame(gameId, pokerRoomHubContext);
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 
     public class GameSettingsRequest
